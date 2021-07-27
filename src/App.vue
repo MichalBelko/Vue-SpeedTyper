@@ -8,8 +8,19 @@
     <div class="pre-container">
       <a href="https:/www.google.com"><i class="fas fa-backward"></i>Leave</a>
       <div class="time">
-        <p><i class="fas fa-stopwatch"></i>0:{{ time }}</p>
-        <!-- <p>{{ country }}</p> -->
+        <p>
+          <i class="fas fa-stopwatch"></i>
+        </p>
+        <p>
+            <div v-if="timer" id="countdownExample">
+              <div class="values">
+              </div>
+            </div>
+            <div v-if="!timer">
+              1:00
+            </div>
+        </p>
+ 
       </div>
     </div>
     <div class="container">
@@ -21,10 +32,21 @@
         {{ word.text }} {{ " " }}
       </span>
       <input
+        v-if="!disabled"
         type="text"
         @keydown.enter="containWord($event)"
         @click="countdown"
         :value="inputValue"
+        :class="{ disabled: disabled }"
+      />
+
+      <input
+        v-if="disabled"
+        type="text"
+        @keydown.enter.self="containWord($event)"
+        @click="countdown"
+        :value="inputValue"
+        readonly
       />
     </div>
 
@@ -40,69 +62,49 @@
 </template>
 
 <script>
-const defaultWords = [
-  "template",
-  "react",
-  "javascript",
-  "babel",
-  "gsap",
-  "html",
-  "css",
-  "bootstrap",
-  "pug",
-  "tailwind",
-  "bulma",
-  "graphql",
-  "mysql",
-  "java",
-  "python",
-  "codedamn",
-  "misko",
-  "belko",
-  "je",
-  "kral",
-  "cool",
-  "movie",
-  "film",
-  "cinema",
-  "word",
-  "english",
-  "drink",
-].map((word) => {
-  return {
-    text: word,
-    correct: false,
-    wrong: false,
-    pending: true,
-  };
-});
+import Timer from "easytimer.js";
+const timer = new Timer();
 
 export default {
   name: "App",
   data() {
     return {
-      words: defaultWords,
+      words: [],
       inputValue: "",
       index: 0,
       score: 0,
       showScore: false,
-      time: 30,
+      time: 10,
       highscore: 0,
       showHighscore: false,
       startGame: true,
+      disabled: true,
+      timer: false,
+      timeOver : false,
     };
   },
   methods: {
-    start() {
+    start(e) {
       this.startGame = false;
-      //   if (this.time > 0) {
-      //     setInterval(() => {
-      //       this.time--;
-      //     }, 1000);
-      //   }
-    },
+      this.disabled = false;
+      this.timer = true;
+     timer.start({countdown: true, startValues: {seconds: 10}});
 
+$('#countdownExample .values').html(timer.getTimeValues().toString());
+
+timer.addEventListener('secondsUpdated', function (e) {
+    $('#countdownExample .values').html(timer.getTimeValues().toString());
+});
+timer.addEventListener('targetAchieved', function (e) {
+    $('#countdownExample .values').html('Time is over!');
+    this.timeOver = true;
+});
+
+    },
+    
     containWord(e) {
+      e.preventDefault();
+
       const value = e.target.value;
       e.target.value = "";
       if (this.words[this.index].text === "") {
@@ -120,9 +122,10 @@ export default {
         this.index++;
       }
 
-      if (this.index === this.words.length) {
+      if (this.index === this.words.length || this.timeOver === true) {
         this.showScore = true;
         this.showHighscore = true;
+        this.disabled = true;
         if (this.score > this.highscore) {
           this.highscore = this.score;
           localStorage.setItem("highscore", this.highscore);
@@ -145,6 +148,19 @@ export default {
   mounted() {
     this.showHighscore = false;
     this.highscore = localStorage.getItem("highscore");
+    fetch("https://random-word-api.herokuapp.com//word?number=25")
+      .then((res) => res.json())
+      .then((data) => {
+        const defaultWords = data.map((word) => {
+          return {
+            text: word,
+            correct: false,
+            wrong: false,
+            pending: true,
+          };
+        });
+        this.words = defaultWords;
+      });
   },
 };
 </script>
@@ -161,6 +177,15 @@ body {
   margin: 0 5px;
   font-size: 15px;
 }
+.values{
+  color:white;
+
+}
+.disabled {
+  pointer-events: none;
+  cursor: pointer;
+}
+
 .fa-stopwatch {
   color: #ffa500;
 }
@@ -258,7 +283,7 @@ main {
 .time {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
 }
 .time p {
   margin: 0 10px;
@@ -280,7 +305,7 @@ input {
   color: #fff;
   letter-spacing: 1px;
   text-align: center;
-  margin-top: 40px;
+  margin-top: 60px;
   font-size: 20px;
   padding: 5px;
 }
@@ -295,6 +320,7 @@ input {
   .pre-container a,
   .pre-container p {
     font-size: 14px;
+    margin: 5px;
   }
   .container-score p {
     font: 20px sans-serif;
