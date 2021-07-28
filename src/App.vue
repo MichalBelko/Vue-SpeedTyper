@@ -195,6 +195,11 @@ timer.addEventListener('secondsUpdated', function (e) {
 </script>
 
 <style>
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
 ::selection {
   color: orangered;
   background-color: transparent;
@@ -224,6 +229,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #1c1d23;
+  min-height: 100vh;
+padding-bottom: 50px;
 }
 
 .red {
@@ -235,6 +242,9 @@ body {
 .pending {
   font-weight: normal;
   color: #808080;
+}
+p a{
+  text-decoration: none;
 }
 ul {
   list-style: none;
@@ -249,6 +259,7 @@ header h1 {
   background-size: 100%;
   -webkit-background-clip: text;
   -webkit-text-stroke: 3px transparent;
+  margin: 40px 0;
 }
 span {
   margin: 0;
@@ -284,6 +295,7 @@ main {
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
+  margin: 30px 0;
 }
 .container-score p {
   color: #fff;
@@ -334,29 +346,9 @@ input {
   color: #fff;
   letter-spacing: 1px;
   text-align: center;
-  margin-top: 60px;
+  margin-top: 80px;
   font-size: 20px;
   padding: 5px;
-}
-@media screen and (max-width: 400px) {
-  main {
-    margin: 0;
-  }
-  .container span {
-    line-height: 22px;
-    font-size: 16px;
-  }
-  .pre-container a,
-  .pre-container p {
-    font-size: 14px;
-    margin: 5px;
-  }
-  .container-score p {
-    font: 20px sans-serif;
-  }
-  .container-score {
-    flex-direction: column;
-  }
 }
 button {
   all: unset;
@@ -376,5 +368,87 @@ button:hover {
   margin-top: 50px;
   font: 25px sans-serif;
   padding: 20px 45px;
+}
+footer {
+  text-align: center;
+  font-size: 1.3rem;
+  padding: 3rem 0;
+  color: white;
+  background: #15151a;
+  animation-delay: 1.3s;
+  transition: 2s all;
+  width: 100%;
+  font-family: Arial;
+  margin:0;
+  
+}
+footer p {
+  animation-delay: 1s;
+  margin-bottom: 0 !important;
+  animation-duration: 1s;
+  margin:0;
+}
+#live{
+  color:white;
+  font-family: Arial;
+  font-weight: normal;
+  font-size: 1.2rem;
+  margin-top: 5px 0;
+
+}
+.borderLeftRight {
+  display: inline-block;
+  position: relative;
+  color: #3960bdf8;
+  font-weight: bold;
+}
+.borderLeftRight::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #51a6ec;
+  transform-origin: bottom right;
+  transition: transform 0.4s cubic-bezier(0.86, 0, 0.07, 1);
+}
+.borderLeftRight:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+.borderLeftRight:hover {
+  cursor: pointer;
+}
+@media screen and (max-width: 400px) {
+  main {
+    margin: 0;
+  }
+  .container span {
+    line-height: 22px;
+    font-size: 16px;
+  }
+  .pre-container a,
+  .pre-container p {
+    font-size: 14px;
+    margin: 5px;
+  }
+  p.score{
+    font-weight: bold;
+  }
+  .container-score p {
+    font-size: 20px ;
+    margin-top: 5px;
+  }
+  .container-score {
+    flex-direction: column;
+  }
+  footer :is(p, #live){
+    font-size: 1.1rem;
+  }
+  footer {
+    padding: 1.5rem;
+  }
 }
 </style>
