@@ -1,19 +1,13 @@
-# speed-typer
+# Mini Vue project - Test your typing skills
 
-## Project setup
-```
-npm install
-```
+## Project technologies:
 
-### Compiles and hot-reloads for development
 ```
-npm run serve
+Html, Css, Sass, Js, Vue, Babel, Webpack, VueBootstrap, EasyTimer
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+michalbelko.github.io/vue-speedtyper/
 
 ### Customize configuration
+
 See [Configuration Reference](https://cli.vuejs.org/config/).
