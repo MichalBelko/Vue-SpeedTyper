@@ -65,6 +65,7 @@
 import Timer from "easytimer.js";
 const timer = new Timer();
 
+
 export default {
   name: "App",
   data() {
@@ -79,31 +80,31 @@ export default {
       showHighscore: false,
       startGame: true,
       disabled: true,
-      timer: false,
       timeOver : false,
+      timer:false,
     };
   },
   methods: {
-    start(e) {
+    start() {
       this.startGame = false;
       this.disabled = false;
       this.timer = true;
-     timer.start({countdown: true, startValues: {seconds: 10}});
+    
+     
+     timer.start({countdown: true, startValues: {seconds: 60}});
 
 $('#countdownExample .values').html(timer.getTimeValues().toString());
 
 timer.addEventListener('secondsUpdated', function (e) {
     $('#countdownExample .values').html(timer.getTimeValues().toString());
 });
-timer.addEventListener('targetAchieved', function (e) {
-    $('#countdownExample .values').html('Time is over!');
-    this.timeOver = true;
-});
-
-    },
+  
+},
     
     containWord(e) {
       e.preventDefault();
+      
+      
 
       const value = e.target.value;
       e.target.value = "";
@@ -122,7 +123,9 @@ timer.addEventListener('targetAchieved', function (e) {
         this.index++;
       }
 
-      if (this.index === this.words.length || this.timeOver === true) {
+       if (this.index === this.words.length || this.timeOver === true) {
+       
+        timer.stop();
         this.showScore = true;
         this.showHighscore = true;
         this.disabled = true;
@@ -137,12 +140,21 @@ timer.addEventListener('targetAchieved', function (e) {
       this.showHighscore = false;
       this.index = 0;
       this.score = 0;
+      this.disabled = false;
+      this.timeOver = false;
       this.words.forEach((word) => {
         word.correct = false;
         word.correct = false;
         word.wrong = false;
         word.pending = true;
       });
+       timer.start({countdown: true, startValues: {seconds: 60}});
+
+$('#countdownExample .values').html(timer.getTimeValues().toString());
+
+timer.addEventListener('secondsUpdated', function (e) {
+    $('#countdownExample .values').html(timer.getTimeValues().toString());
+});
     },
   },
   mounted() {
@@ -161,6 +173,23 @@ timer.addEventListener('targetAchieved', function (e) {
         });
         this.words = defaultWords;
       });
+
+       
+      timer.addEventListener('targetAchieved', () => {
+    $('#countdownExample .values').html('Time is over!');
+    this.timeOver = true;
+   if ( this.timeOver === true) {
+        timer.stop();
+        this.showScore = true;
+        this.showHighscore = true;
+        this.disabled = true;
+        if (this.score > this.highscore) {
+          this.highscore = this.score;
+          localStorage.setItem("highscore", this.highscore);
+        }
+      }
+});
+
   },
 };
 </script>
