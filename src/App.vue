@@ -6,7 +6,7 @@
   </header>
   <main>
     <div class="pre-container">
-      <a href="https:/www.google.com"><i class="fas fa-backward"></i>Leave</a>
+      <a href="#"><i class="fas fa-backward"></i>Leave</a>
       <div class="time">
         <p>
           <i class="fas fa-stopwatch"></i>
